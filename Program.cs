@@ -1,0 +1,65 @@
+﻿
+// McKenna Alder
+// Section 003
+
+using System;
+
+class Program
+{
+	static void Main(string[] args)
+	{
+		Console.WriteLine("Welcome to the dice throwing simulator!");
+		Console.Write("How many dice rolls would you like to simulate? ");
+		int totalRolls;
+
+		// Validates the user input
+		while (!int.TryParse(Console.ReadLine(), out totalRolls) || totalRolls <= 0)
+		{
+			Console.Write("Please enter a valid positive number: ");
+		}
+
+		// Calls the method to roll the dice and get the results
+		var results = DiceRoller.RollDices(totalRolls);
+
+
+		// Outputs the results
+		Console.WriteLine("DICE ROLLING SIMULATION RESULTS");
+		Console.WriteLine("Each \"*\" represents 1% of the total number of rolls.");
+		Console.WriteLine($"Total number of rolls = {totalRolls}.");
+
+		// For loop iterates through the different possible sums of the dice
+		for (int i = 2; i <= 12; i++)
+		{
+			Console.Write($"{i}: ");
+
+			// Calculating the percentage of each sum
+			int percentage = (int)Math.Round((double)results[i] / totalRolls * 100);
+			Console.WriteLine(new string('*', percentage));
+		}
+
+		Console.WriteLine("Thank you for using the dice throwing simulator. Goodbye!");
+	}
+}
+
+class DiceRoller
+{
+	private static Random random = new Random();
+
+	// Calls the dice roll method
+	public static int[] RollDices(int numberOfRolls)
+	{
+		// This array stores the count of each sum
+		int[] results = new int[13];
+
+		// Rolls the dice the specified number of times
+		for (int i = 0; i < numberOfRolls; i++)
+		{
+			int rollOne = random.Next(1, 7);
+			int rollTwo = random.Next(1, 7);
+			int sum = rollOne + rollTwo;
+			results[sum]++;
+		}
+
+		return results;
+	}
+}
